@@ -1,0 +1,145 @@
+@model IEnumerable<WhiteLagoon.Domain.Entities.Villa>
+
+@{
+    ViewData["Title"] = "Luxury Villas";
+}
+
+<div class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5">
+            <div class="text-center text-md-start mb-3 mb-md-0">
+                <h1 class="display-4 fw-bold text-light">Premium Villas</h1>
+                <p class="lead text-muted mb-0">Your perfect private sanctuary awaits</p>
+            </div>
+            <a asp-action="Create" class="btn btn-primary btn-lg px-4 py-3 fw-bold shadow">
+                <i class="bi bi-plus-circle me-2"></i>Create New Villa
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="text-center py-5 bg-dark rounded-3 border border-secondary">
+                    <div class="mb-4">
+                        <i class="bi bi-house fs-1 text-muted"></i>
+                    </div>
+                    <h3 class="text-light mb-3">No Villas Available</h3>
+                    <p class="text-muted">Click the button above to add your first villa</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var villa in Model)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card bg-dark border-secondary h-100 overflow-hidden position-relative hover-effect">
+                        <div class="ratio ratio-16x9">
+                            <img src="@(!string.IsNullOrEmpty(villa.ImageUrl) ? villa.ImageUrl : "https://placehold.co/600x400/EEE/31343C")" 
+                                 class="card-img-top object-fit-cover" 
+                                 alt="@villa.Name"
+                                 style="filter: brightness(0.85);">
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title fw-bold text-light mb-0">@villa.Name</h5>
+                                <span class="badge bg-primary fs-6">$@villa.Price.ToString("N0")/night</span>
+                            </div>
+                            <p class="card-text text-muted mb-4">@villa.Description</p>
+                            
+                            <div class="d-flex gap-3 mb-4">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-arrows-fullscreen me-1 text-primary"></i>
+                                    <span class="text-light">@villa.MeterSquared m²</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-people me-1 text-primary"></i>
+                                    <span class="text-light">Up to @villa.Occupancy</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent border-top border-secondary p-3">
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Update" asp-route-villaid="@villa.Id" 
+                                   class="btn btn-sm btn-outline-warning px-3 py-2 fw-medium">
+                                    <i class="bi bi-pencil me-1"></i>Edit
+                                </a>
+                                <a asp-action="" asp-route-id="@villa.Id" 
+                                   class="btn btn-sm btn-outline-info px-3 py-2 fw-medium">
+                                    <i class="bi bi-eye me-1"></i>View
+                                </a>
+                                <form asp-action="Delete" asp-route-id="@villa.Id" method="post" class="d-inline">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger px-3 py-2 fw-medium"
+                                            onclick="return confirm('Are you sure you want to delete @villa.Name?')">
+                                        <i class="bi bi-trash me-1"></i>Delete
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    
+    .card {
+        border-radius: 16px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        backdrop-filter: blur(2px);
+    }
+    
+    .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+        border-color: #4b5563 !important;
+    }
+    
+    .card-img-top {
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+        height: 200px;
+        object-fit: cover;
+    }
+    
+    .card-footer {
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+    
+    .btn-outline-warning:hover {
+        background-color: #f59e0b;
+        border-color: #f59e0b;
+    }
+    
+    .btn-outline-info:hover {
+        background-color: #38bdf8;
+        border-color: #38bdf8;
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #ef4444;
+        border-color: #ef4444;
+    }
+    
+    @@media (max-width: 768px) {
+        .card-img-top {
+            height: 180px;
+        }
+        .btn-group-sm > .btn {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.85rem;
+        }
+    }
+</style>

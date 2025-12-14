@@ -48,6 +48,7 @@ public class VillaController : Controller
         
         if (obj == null)
         {
+            TempData["ErrorMessage"] = "The villa could not be found.";
             return RedirectToAction("Error", "Home");
         }
         return View(obj);
@@ -91,5 +92,4 @@ public class VillaController : Controller
 
         return View();
     }
-    
 }

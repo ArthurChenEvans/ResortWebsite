@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Error";
+}
+
+<div class="min-vh-100 d-flex align-items-center py-5 bg-gradient-error">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-6">
+                <div class="card bg-dark border-secondary shadow-lg rounded-4 overflow-hidden">
+                    <div class="card-body p-4 p-md-5 text-center">
+                        <div class="mb-4">
+                            <div class="d-inline-block p-3 bg-danger bg-opacity-10 rounded-circle">
+                                <i class="bi bi-exclamation-triangle fs-1 text-danger"></i>
+                            </div>
+                        </div>
+                        
+                        <h1 class="display-2 fw-bold text-light mb-3">Oops!</h1>
+                        <h2 class="text-muted mb-4">Something went wrong</h2>
+                        
+                        <p class="lead text-muted mb-4">
+                            We encountered an unexpected error while processing your request.
+                        </p>
+                        
+                        <div class="alert alert-danger bg-opacity-10 border-danger mb-4">
+                            <div class="d-flex align-items-start">
+                                <i class="bi bi-info-circle me-2"></i>
+                                <div>
+                                    <strong>Error Details:</strong>
+                                    <span class="mb-0">@TempData["ErrorMessage"]</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-3">
+                            <a asp-controller="Home" asp-action="Index" 
+                               class="btn btn-primary btn-lg py-3 fw-bold">
+                                <i class="bi bi-house-door me-2"></i>Return to Homepage
+                            </a>
+                            
+                            <button onclick="location.reload()" 
+                                    class="btn btn-outline-secondary py-2">
+                                <i class="bi bi-arrow-clockwise me-2"></i>Refresh Page
+                            </button>
+                        </div>
+                        
+                        <div class="mt-5 pt-4 border-top border-secondary">
+                            <p class="text-muted small mb-0">
+                                Error ID: <span class="text-light">@Context.TraceIdentifier</span> • 
+                                Time: <span class="text-light">@DateTime.Now.ToString("g")</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-error {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #4338ca 100%);
+        min-height: 100vh;
+    }
+    
+    .card {
+        border: 1px solid #334155;
+        transition: transform 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .btn-primary {
+        background: linear-gradient(to right, #4f46e5, #7c3aed);
+        border: none;
+        box-shadow: 0 4px 15px rgba(124, 58, 237, 0.35);
+    }
+    
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45);
+    }
+    
+    .alert {
+        background-color: rgba(220, 38, 38, 0.15);
+    }
+</style>
