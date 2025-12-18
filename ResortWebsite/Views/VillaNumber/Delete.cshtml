@@ -1,0 +1,72 @@
+<!-- Delete.cshtml -->
+@model WhiteLagoon.Domain.Entities.VillaNumber
+
+@{
+    ViewData["Title"] = "Delete Room";
+}
+
+<div class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-light">Delete Room</h1>
+            <p class="lead text-muted">Are you sure you want to remove <span class="text-danger">Room @Model.Villa_Number</span>?</p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-dark border-danger shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-darker py-3">
+                    <h2 class="text-light mb-0"><i class="bi bi-trash3-fill me-2 text-danger"></i>Confirm Deletion</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="text-center mb-4">
+                        <div class="d-flex justify-content-center mb-3">
+                            <div class="p-4 bg-primary bg-opacity-10 rounded-circle">
+                                <h1 class="display-3 fw-bold text-primary mb-0">@Model.Villa_Number</h1>
+                            </div>
+                        </div>
+                        <h3 class="text-light fw-bold">@Model.Villa.Name</h3>
+                        <p class="text-muted mb-0">@Model.SpecialDetails</p>
+                    </div>
+                    
+                    <div class="alert alert-danger bg-danger bg-opacity-10 border-danger mb-4">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone. All associated data will be permanently deleted.
+                    </div>
+                    
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Villa_Number" />
+                        
+                        <div class="d-flex gap-3">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 flex-fill">
+                                <i class="bi bi-arrow-left me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger px-4 py-2 flex-fill fw-medium">
+                                <i class="bi bi-trash3 me-1"></i>Confirm Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    .bg-darker {
+        background-color: #0a0f1a !important;
+    }
+    .card {
+        border: 1px solid #dc2626;
+    }
+    .alert {
+        background-color: rgba(220, 38, 38, 0.15);
+        border-color: #dc2626;
+    }
+</style>

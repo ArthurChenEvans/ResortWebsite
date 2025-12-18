@@ -1,0 +1,99 @@
+@model IEnumerable<WhiteLagoon.Domain.Entities.VillaNumber>
+
+@{
+    ViewData["Title"] = "Room Numbers";
+}
+
+<div class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center mb-5">
+            <div class="text-center text-md-start mb-3 mb-md-0">
+                <h1 class="display-4 fw-bold text-light">Room Inventory</h1>
+                <p class="lead text-muted mb-0">Manage villa room assignments</p>
+            </div>
+            <a asp-action="Create" class="btn btn-primary btn-lg px-4 py-3 fw-bold shadow">
+                <i class="bi bi-plus-circle me-2"></i>Create New Room
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row g-4">
+        @if (!Model.Any())
+        {
+            <div class="col-12">
+                <div class="text-center py-5 bg-dark rounded-3 border border-secondary">
+                    <div class="mb-4">
+                        <i class="bi bi-door-open fs-1 text-muted"></i>
+                    </div>
+                    <h3 class="text-light mb-3">No Rooms Available</h3>
+                    <p class="text-muted">Click the button above to add your first room</p>
+                </div>
+            </div>
+        }
+        else
+        {
+            @foreach (var room in Model.OrderBy(x => x.Villa_Number))
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card bg-dark border-secondary h-100 overflow-hidden position-relative hover-effect">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <h5 class="card-title fw-bold text-light mb-0">Room @room.Villa_Number</h5>
+                                <span class="badge bg-primary fs-6">@room.Villa.Name</span>
+                            </div>
+                            <p class="card-text text-muted mb-4">@room.SpecialDetails</p>
+                        </div>
+                        
+                        <div class="card-footer bg-transparent border-top border-secondary p-3">
+                            <div class="d-flex justify-content-between">
+                                <a asp-action="Update" asp-route-villaNumber="@room.Villa_Number" 
+                                   class="btn btn-sm btn-outline-warning px-3 py-2 fw-medium">
+                                    <i class="bi bi-pencil me-1"></i>Edit
+                                </a>
+                                <a asp-action="Delete" asp-route-villaNumber="@room.Villa_Number" 
+                                   class="btn btn-sm btn-outline-danger px-3 py-2 fw-medium">
+                                    <i class="bi bi-trash me-1"></i>Delete
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    
+    .card {
+        border-radius: 16px;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+    }
+    
+    .hover-effect:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+        border-color: #4b5563 !important;
+    }
+    
+    .card-footer {
+        border-bottom-left-radius: 16px;
+        border-bottom-right-radius: 16px;
+    }
+    
+    .btn-outline-warning:hover {
+        background-color: #f59e0b;
+        border-color: #f59e0b;
+    }
+    
+    .btn-outline-danger:hover {
+        background-color: #ef4444;
+        border-color: #ef4444;
+    }
+</style>
