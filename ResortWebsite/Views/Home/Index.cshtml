@@ -1,8 +1,189 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model ResortWebsite.ViewModels.HomeViewModel
+
+@{
+    ViewData["Title"] = "Luxury Villas & Resorts";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="hero-section position-relative" style="height: 85vh; overflow: hidden;">
+    <div class="hero-image position-absolute w-100 h-100" style="
+        background-image: url('images/hero.jpeg'); 
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    "></div>
+    <div class="hero-content position-absolute w-100 h-100 d-flex align-items-center justify-content-center text-center text-white">
+        <div class="container">
+            <h1 class="display-1 fw-bold mb-4" style="text-shadow: 0 2px 8px rgba(0,0,0,0.5);">
+                Escape to Luxury
+            </h1>
+            <p class="lead mb-5 fs-3" style="text-shadow: 0 2px 4px rgba(0,0,0,0.5);">
+                Discover your perfect villa retreat with breathtaking views and world-class amenities
+            </p>
+            <a href="#availability" class="btn btn-primary btn-lg px-5 py-3 fw-bold rounded-pill shadow-lg hover-scale">
+                Check Availability <i class="bi bi-arrow-down ms-2"></i>
+            </a>
+        </div>
+    </div>
+    <div class="hero-overlay position-absolute bottom-0 w-100" style="height: 150px; background: linear-gradient(to top, rgba(15, 23, 42, 0.9), transparent);"></div>
 </div>
+
+<section id="availability" class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card bg-dark border-secondary shadow-lg rounded-4 overflow-hidden">
+                    <div class="card-header bg-darker py-3 text-center">
+                        <h2 class="text-light mb-0 fw-bold">
+                            <i class="bi bi-calendar-check me-2"></i>Check Availability
+                        </h2>
+                    </div>
+                    <div class="card-body p-4">
+                        <form method="get" action="#" class="row g-3">
+                            <div class="col-md-4">
+                                <label class="form-label text-light fw-medium mb-1">Check-in Date</label>
+                                <input type="date" class="form-control bg-darker border-secondary text-light" 
+                                       value="@Model.CheckInDate.ToString("yyyy-MM-dd")">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label text-light fw-medium mb-1">Nights</label>
+                                <select class="form-select bg-darker border-secondary text-light">
+                                    @for (int i = 1; i <= 14; i++)
+                                    {
+                                        <option value="@i" selected="@(i == Model.Nights)">@i @(i == 1 ? "Night" : "Nights")</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-md-4 d-flex align-items-end">
+                                <button type="submit" class="btn btn-primary w-100 py-2 fw-medium">
+                                    <i class="bi bi-search me-1"></i> Check Availability
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="py-5 bg-dark text-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold mb-3">Our Luxury Villas</h2>
+            <p class="lead text-muted">Each villa offers unique experiences and premium amenities</p>
+        </div>
+        
+        <div class="row g-4">
+            @foreach (var villa in Model.Villas)
+            {
+                <div class="col-md-6 col-lg-4">
+                    <div class="card bg-darker border-secondary shadow-lg rounded-4 overflow-hidden h-100 hover-lift">
+                        <div class="position-relative">
+                            <img src="@villa.ImageUrl" class="card-img-top" alt="@villa.Name" 
+                                 style="height: 250px; object-fit: cover;">
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge bg-primary fs-6 py-2 px-3">
+                                    $@villa.Price.ToString("0.00")/night
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <h5 class="card-title text-light mb-2">@villa.Name</h5>
+                            <p class="card-text text-muted mb-3" style="height: 60px; overflow: hidden;">
+                                @villa.Description
+                            </p>
+                            
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-house-door text-primary me-1"></i>
+                                    <span class="text-light">@villa.MeterSquared m²</span>
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="bi bi-people text-primary me-1"></i>
+                                    <span class="text-light">@villa.Occupancy guests</span>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="button" class="btn btn-outline-primary rounded-3"
+                                        data-bs-toggle="modal" data-bs-target="#villaModal-@villa.Id">
+                                    <i class="bi bi-info-circle me-1"></i> View Details
+                                </button>
+                                <a href="#" class="btn btn-primary rounded-3 fw-medium">
+                                    <i class="bi bi-bookmark-check me-1"></i> Book Now
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal fade" id="villaModal-@villa.Id" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content bg-dark border-secondary">
+                            <div class="modal-header bg-darker">
+                                <h5 class="modal-title text-light fw-bold">@villa.Name</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <partial name="_VillaDetail" model="villa" />
+                            </div>
+                            <div class="modal-footer bg-darker">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary">Book Now</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="#" class="btn btn-outline-primary px-4 py-2">
+                View All Villas <i class="bi bi-arrow-right ms-1"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    .hero-section {
+        position: relative;
+    }
+    .hero-overlay {
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    .bg-darker {
+        background-color: #0a0f1a !important;
+    }
+    .card {
+        border: 1px solid #334155;
+        transition: transform 0.3s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .hover-scale:hover {
+        transform: scale(1.05);
+    }
+    .modal-content {
+        border: 1px solid #334155;
+    }
+    .modal-header, .modal-footer {
+        border-color: #334155;
+    }
+    .btn-close-white {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    .text-primary {
+        color: #3b82f6 !important;
+    }
+    .badge {
+        font-weight: 600;
+    }
+</style>

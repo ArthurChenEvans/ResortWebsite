@@ -17,7 +17,7 @@ public class VillaController : Controller
     
     public IActionResult Index()
     {
-        var villas = _unitOfWork.Villa.GetAll();
+        var villas = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity");
         return View(villas);
     }
 
@@ -96,6 +96,8 @@ public class VillaController : Controller
                
                 obj.ImageUrl = @"/images/VillaImages/" + fileName;
             }
+
+            obj.ImageUrl ??= "https://placehold.co/600x400/EEE/31343C";
             
             _unitOfWork.Villa.Update(obj);
             _unitOfWork.Save();

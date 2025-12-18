@@ -39,7 +39,7 @@
                 <div class="col-md-6 col-lg-4">
                     <div class="card bg-dark border-secondary h-100 overflow-hidden position-relative hover-effect">
                         <div class="ratio ratio-16x9">
-                            <img src="@(!string.IsNullOrEmpty(villa.ImageUrl) ? villa.ImageUrl : "https://placehold.co/600x400/EEE/31343C")" 
+                            <img src="@villa.ImageUrl" 
                                  class="card-img-top object-fit-cover" 
                                  alt="@villa.Name"
                                  style="filter: brightness(0.85);">
@@ -69,16 +69,33 @@
                                    class="btn btn-sm btn-outline-warning px-3 py-2 fw-medium">
                                     <i class="bi bi-pencil me-1"></i>Edit
                                 </a>
-                                <a asp-action="" asp-route-id="@villa.Id" 
-                                   class="btn btn-sm btn-outline-info px-3 py-2 fw-medium">
+                                <button type="button" class="btn btn-sm btn-outline-info px-3 py-2 fw-medium"
+                                        data-bs-toggle="modal" data-bs-target="#villaModal-@villa.Id">
                                     <i class="bi bi-eye me-1"></i>View
-                                </a>
+                                </button>
                                 <form asp-action="Delete" asp-route-id="@villa.Id" method="post" class="d-inline">
                                     <button type="submit" class="btn btn-sm btn-outline-danger px-3 py-2 fw-medium"
                                             onclick="return confirm('Are you sure you want to delete @villa.Name?')">
                                         <i class="bi bi-trash me-1"></i>Delete
                                     </button>
                                 </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="villaModal-@villa.Id" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-centered">
+                        <div class="modal-content bg-dark border-secondary">
+                            <div class="modal-header bg-darker">
+                                <h5 class="modal-title text-light fw-bold">@villa.Name</h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-4">
+                                <partial name="_VillaDetail" model="villa" />
+                            </div>
+                            <div class="modal-footer bg-darker">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
                             </div>
                         </div>
                     </div>
@@ -131,6 +148,18 @@
     .btn-outline-danger:hover {
         background-color: #ef4444;
         border-color: #ef4444;
+    }
+    
+    .modal-content {
+        border: 1px solid #334155;
+    }
+    
+    .modal-header, .modal-footer {
+        border-color: #334155;
+    }
+    
+    .btn-close-white {
+        filter: invert(1) grayscale(100%) brightness(200%);
     }
     
     @@media (max-width: 768px) {

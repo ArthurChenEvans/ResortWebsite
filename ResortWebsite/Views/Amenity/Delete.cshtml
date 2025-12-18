@@ -1,0 +1,89 @@
+@model WhiteLagoon.Domain.Entities.Amenity
+
+@{
+    ViewData["Title"] = "Delete Amenity";
+}
+
+<div class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-light">Delete Amenity</h1>
+            <p class="lead text-muted">Confirm deletion of <span class="text-warning">@Model.Name</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-dark border-secondary shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-darker py-3">
+                    <h2 class="text-light mb-0"><i class="bi bi-trash me-2"></i>Confirm Deletion</h2>
+                </div>
+                <div class="card-body p-4">
+                    <div class="alert alert-warning mb-4">
+                        <i class="bi bi-exclamation-triangle me-2"></i>
+                        <strong>Warning:</strong> This action cannot be undone. Deleting this amenity will permanently remove it from the system.
+                    </div>
+                    
+                    <div class="mb-4 p-3 bg-darker rounded-3">
+                        <div class="mb-3">
+                            <strong class="text-light d-block mb-1">Amenity Name:</strong>
+                            <span class="text-light fs-5">@Model.Name</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong class="text-light d-block mb-1">Description:</strong>
+                            <span class="text-muted">@Model.Description</span>
+                        </div>
+                        <div class="mb-3">
+                            <strong class="text-light d-block mb-1">Associated Villa:</strong>
+                            <span class="badge bg-primary-soft">@Model.Villa?.Name</span>
+                        </div>
+                        <div>
+                            <strong class="text-light d-block mb-1">Amenity ID:</strong>
+                            <span class="text-muted">#@Model.Id</span>
+                        </div>
+                    </div>
+                    
+                    <form asp-action="Delete" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        
+                        <div class="d-flex gap-3 mt-4">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 flex-fill">
+                                <i class="bi bi-arrow-left me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-danger px-4 py-2 flex-fill fw-medium">
+                                <i class="bi bi-trash me-1"></i>Delete Permanently
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    .bg-darker {
+        background-color: #0a0f1a !important;
+    }
+    .card {
+        border: 1px solid #334155;
+    }
+    .alert-warning {
+        background-color: rgba(245, 158, 11, 0.15);
+        border-color: #f59e0b;
+        color: #f59e0b;
+    }
+    .badge {
+        padding: 0.5em 0.8em;
+        font-size: 0.85em;
+    }
+    .bg-primary-soft {
+        background-color: rgba(59, 130, 246, 0.15);
+        color: #3b82f6;
+    }
+</style>

@@ -1,0 +1,92 @@
+@model ResortWebsite.ViewModels.AmenityViewModel
+
+@{
+    ViewData["Title"] = "Update Amenity";
+}
+
+<div class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-light">Update Amenity</h1>
+            <p class="lead text-muted">Modify details for <span class="text-primary">@Model.Amenity.Name</span></p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="card bg-dark border-secondary shadow-lg rounded-4 overflow-hidden">
+                <div class="card-header bg-darker py-3">
+                    <h2 class="text-light mb-0"><i class="bi bi-pencil-square me-2"></i>Edit Amenity</h2>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Update" method="post">
+                        <input asp-for="Amenity.Id" type="hidden" />
+                        
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger mb-4"></div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Amenity.Name" class="form-label text-light fw-medium"></label>
+                            <input asp-for="Amenity.Name" class="form-control bg-darker border-secondary text-light" 
+                                   placeholder="Private Infinity Pool"
+                                   value="@Model.Amenity.Name">
+                            <span asp-validation-for="Amenity.Name" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Amenity.Description" class="form-label text-light fw-medium"></label>
+                            <textarea asp-for="Amenity.Description" class="form-control bg-darker border-secondary text-light" 
+                                      rows="3" placeholder="Stunning infinity pool overlooking the ocean">@Model.Amenity.Description</textarea>
+                            <span asp-validation-for="Amenity.Description" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label asp-for="Amenity.VillaId" class="form-label text-light fw-medium"></label>
+                            <select asp-for="Amenity.VillaId" asp-items="Model.Villas" 
+                                    class="form-select bg-darker border-secondary text-light">
+                            </select>
+                            <span asp-validation-for="Amenity.VillaId" class="text-danger small"></span>
+                        </div>
+                        
+                        <div class="d-flex gap-3 mt-5">
+                            <a asp-action="Index" class="btn btn-outline-secondary px-4 py-2 flex-fill">
+                                <i class="bi bi-arrow-left me-1"></i>Cancel
+                            </a>
+                            <button type="submit" class="btn btn-warning px-4 py-2 flex-fill fw-medium text-dark">
+                                <i class="bi bi-save me-1"></i>Update Amenity
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    .bg-darker {
+        background-color: #0a0f1a !important;
+    }
+    .form-control, .form-select {
+        transition: border-color 0.2s;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #f59e0b !important;
+        box-shadow: 0 0 0 0.25rem rgba(245, 158, 11, 0.25);
+    }
+    .card {
+        border: 1px solid #334155;
+    }
+    .alert {
+        background-color: rgba(220, 38, 38, 0.15);
+        border-color: #dc2626;
+    }
+</style>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

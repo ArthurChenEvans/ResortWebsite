@@ -28,14 +28,40 @@
                         <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" asp-area="" asp-controller="Villa" asp-action="Index">Villa</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" asp-area="" asp-controller="VillaNumber" asp-action="Index">Villa Number</a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
+                    <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="contentManagementDropdown" role="button" 
+                               data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-collection me-1"></i>Content Management
+                            </a>
+                            <ul class="dropdown-menu bg-darker border-secondary dropdown-menu-dark" aria-labelledby="contentManagementDropdown">
+                                <li>
+                                    <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Villa" ? "active" : "")" 
+                                       asp-area=""
+                                       asp-controller="Villa"
+                                       asp-action="Index">
+                                        <i class="bi bi-house me-2"></i>Villas
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "VillaNumber" ? "active" : "")" 
+                                       asp-area=""
+                                       asp-controller="VillaNumber"
+                                       asp-action="Index">
+                                        <i class="bi bi-door-open me-2"></i>Villa Numbers
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Amenity" ? "active" : "")" 
+                                       asp-area=""
+                                       asp-controller="Amenity"
+                                       asp-action="Index">
+                                        <i class="bi bi-stars me-2"></i>Amenities
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                 </ul>
             </div>
         </div>
