@@ -1,4 +1,7 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 
 namespace WhiteLagoon.Domain.Entities;
 
@@ -18,8 +21,13 @@ public class Villa
    public int MeterSquared { get; set; }
    [Required]
    public int Occupancy { get; set; }
+   [NotMapped]
+   public IFormFile? Image { get; set; }
    [Display(Name = "Image Url")]
    public string? ImageUrl { get; set; }
-   public DateTimeOffset CreatedAt { get; set; }
-   public DateTimeOffset UpdatedAt { get; set; }
+   public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
+   public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+   
+   [ValidateNever]
+   public IEnumerable<Amenity> VillaAmenity { get; set; }
 }
