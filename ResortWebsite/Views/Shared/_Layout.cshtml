@@ -15,15 +15,16 @@
 <header>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom border-body py-3">
         <div class="container-fluid">
-            <a class="navbar-brand fw-bold text-primary" asp-area="" asp-controller="Home" asp-action="Index">
-                <i class="bi bi-palm-tree me-2"></i>ResortWebsite
+            <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo.png" alt="Logo" height="30" class="me-2">
+                <span class="fw-bold text-primary">ResortWebsite</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" 
                     aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav ms-auto">
+                <ul class="navbar-nav me-auto">
                     <li class="nav-item">
                         <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                     </li>
@@ -31,38 +32,39 @@
                         <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                     </li>
                     <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="contentManagementDropdown" role="button" 
-                               data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="bi bi-collection me-1"></i>Content Management
-                            </a>
-                            <ul class="dropdown-menu bg-darker border-secondary dropdown-menu-dark" aria-labelledby="contentManagementDropdown">
-                                <li>
-                                    <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Villa" ? "active" : "")" 
-                                       asp-area=""
-                                       asp-controller="Villa"
-                                       asp-action="Index">
-                                        <i class="bi bi-house me-2"></i>Villas
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "VillaNumber" ? "active" : "")" 
-                                       asp-area=""
-                                       asp-controller="VillaNumber"
-                                       asp-action="Index">
-                                        <i class="bi bi-door-open me-2"></i>Villa Numbers
-                                    </a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Amenity" ? "active" : "")" 
-                                       asp-area=""
-                                       asp-controller="Amenity"
-                                       asp-action="Index">
-                                        <i class="bi bi-stars me-2"></i>Amenities
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                        <a class="nav-link dropdown-toggle" href="#" id="contentManagementDropdown" role="button" 
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-collection me-1"></i>Content Management
+                        </a>
+                        <ul class="dropdown-menu bg-darker border-secondary dropdown-menu-dark" aria-labelledby="contentManagementDropdown">
+                            <li>
+                                <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Villa" ? "active" : "")" 
+                                   asp-area=""
+                                   asp-controller="Villa"
+                                   asp-action="Index">
+                                    <i class="bi bi-house me-2"></i>Villas
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "VillaNumber" ? "active" : "")" 
+                                   asp-area=""
+                                   asp-controller="VillaNumber"
+                                   asp-action="Index">
+                                    <i class="bi bi-door-open me-2"></i>Villa Numbers
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item @(ViewContext.RouteData.Values["Controller"]?.ToString() == "Amenity" ? "active" : "")" 
+                                   asp-area=""
+                                   asp-controller="Amenity"
+                                   asp-action="Index">
+                                    <i class="bi bi-stars me-2"></i>Amenities
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
                 </ul>
+                <partial name="_LoginPartial" />
             </div>
         </div>
     </nav>
