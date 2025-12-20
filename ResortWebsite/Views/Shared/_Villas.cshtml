@@ -1,0 +1,112 @@
+@model ResortWebsite.ViewModels.HomeViewModel;
+<div id="Villas">
+    
+<div class="row g-4">
+    @foreach (var villa in Model.Villas)
+    {
+        <div class="col-md-6 col-lg-4">
+            <div class="card bg-darker border-secondary shadow-lg rounded-4 overflow-hidden h-100 hover-lift">
+                <div class="position-relative">
+                    <img src="@villa.ImageUrl" class="card-img-top" alt="@villa.Name" 
+                         style="height: 250px; object-fit: cover;">
+                    <div class="position-absolute top-0 end-0 m-2">
+                        <span class="badge bg-primary fs-6 py-2 px-3">
+                            $@villa.Price.ToString("0.00")/night
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body p-3">
+                    <h5 class="card-title text-light mb-2">@villa.Name</h5>
+                    <p class="card-text text-muted mb-3" style="height: 60px; overflow: hidden;">
+                        @villa.Description
+                    </p>
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-house-door text-primary me-1"></i>
+                            <span class="text-light">@villa.MeterSquared m²</span>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <i class="bi bi-people text-primary me-1"></i>
+                            <span class="text-light">@villa.Occupancy guests</span>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="button" class="btn btn-outline-primary rounded-3"
+                                data-bs-toggle="modal" data-bs-target="#villaModal-@villa.Id">
+                            <i class="bi bi-info-circle me-1"></i> View Details
+                        </button>
+                        @if (Model.CheckInDate > DateOnly.FromDateTime((DateTime.Now)))
+                        {
+                            if (villa.IsAvailable)
+                            {
+                                <a class="btn btn-primary rounded-3 fw-medium">
+                                    <i class="bi bi-bookmark-check me-1"></i> Book Now
+                                </a>
+                            }
+                            else
+                            {
+                                <a class="btn btn-danger rounded-3 fw-medium disabled">
+                                    <i class="bi bi-bookmark-x me-1"></i> Sold Out
+                                </a>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modal fade" id="villaModal-@villa.Id" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content bg-dark border-secondary">
+                    <div class="modal-header bg-darker">
+                        <h5 class="modal-title text-light fw-bold">@villa.Name</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <partial name="_VillaDetail" model="villa" />
+                    </div>
+                    <div class="modal-footer bg-darker">
+                        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                        @if (Model.CheckInDate >= DateOnly.FromDateTime((DateTime.Now)))
+                        {
+                            if (villa.IsAvailable)
+                            {
+                                <button type="button" class="btn btn-primary">Book Now</button>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn btn-danger" disabled>Sold Out</button>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+</div>
+
+<style>
+
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+    .modal-content {
+        border: 1px solid #334155;
+    }
+    .modal-header, .modal-footer {
+        border-color: #334155;
+    }
+    .btn-close-white {
+        filter: invert(1) grayscale(100%) brightness(200%);
+    }
+    .text-primary {
+        color: #3b82f6 !important;
+    }
+    .badge {
+        font-weight: 600;
+    }
+</style>
