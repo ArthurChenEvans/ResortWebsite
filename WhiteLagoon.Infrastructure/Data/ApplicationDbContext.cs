@@ -1,9 +1,10 @@
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using WhiteLagoon.Domain.Entities;
 
 namespace WhiteLagoon.Infrastructure.Data;
 
-public class ApplicationDbContext : DbContext
+public class ApplicationDbContext : IdentityDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
@@ -12,10 +13,16 @@ public class ApplicationDbContext : DbContext
     public DbSet<Villa> Villas { get; set; }
     public DbSet<VillaNumber> VillaNumbers { get; set; }
     public DbSet<Amenity> Amenities { get; set; }
+    public DbSet<ApplicationUser> ApplicationUsers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        modelBuilder.Entity<ApplicationUser>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("NOW()")
+            .ValueGeneratedOnAddOrUpdate();
         
         var villas = new List<Villa>
         {
@@ -82,6 +89,15 @@ public class ApplicationDbContext : DbContext
         };
 
         modelBuilder.Entity<Villa>().HasData(villas);
+        modelBuilder.Entity<Villa>()
+            .Property(e => e.CreatedAt)
+            .HasDefaultValueSql("NOW()")
+            .ValueGeneratedOnAdd();
+        
+        modelBuilder.Entity<Villa>()
+            .Property(e => e.UpdatedAt)
+            .HasDefaultValueSql("NOW()")
+            .ValueGeneratedOnAddOrUpdate();
         
         var villaNumbers = new List<VillaNumber>
         {

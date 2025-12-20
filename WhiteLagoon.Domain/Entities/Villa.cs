@@ -25,8 +25,8 @@ public class Villa
    public IFormFile? Image { get; set; }
    [Display(Name = "Image Url")]
    public string? ImageUrl { get; set; }
-   public DateTimeOffset CreatedAt { get; init; } = DateTimeOffset.UtcNow;
-   public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
+   public DateTimeOffset CreatedAt { get; init; } 
+   public DateTimeOffset UpdatedAt { get; set; }
    
    [ValidateNever]
    public IEnumerable<Amenity> VillaAmenity { get; set; }
