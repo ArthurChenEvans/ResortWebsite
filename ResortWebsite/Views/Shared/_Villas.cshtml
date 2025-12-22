@@ -41,7 +41,10 @@
                         {
                             if (villa.IsAvailable)
                             {
-                                <a class="btn btn-primary rounded-3 fw-medium">
+                                <a class="btn btn-primary rounded-3 fw-medium" asp-controller="Booking" asp-action="FinalizeBooking"
+                                    asp-route-villaId="@villa.Id"
+                                    asp-route-checkInDate="@Model.CheckInDate.ToString("yyyy-MM-dd")"
+                                    asp-route-nights="@Model.Nights">
                                     <i class="bi bi-bookmark-check me-1"></i> Book Now
                                 </a>
                             }
@@ -73,11 +76,14 @@
                         {
                             if (villa.IsAvailable)
                             {
-                                <button type="button" class="btn btn-primary">Book Now</button>
+                                <a type="button" class="btn btn-primary" asp-controller="Booking" asp-action="FinalizeBooking"
+                                        asp-route-villaId="@villa.Id"
+                                        asp-route-checkInDate="@Model.CheckInDate.ToString("yyyy-MM-dd")"
+                                        asp-route-nights="@Model.Nights">Book Now</a>
                             }
                             else
                             {
-                                <button type="button" class="btn btn-danger" disabled>Sold Out</button>
+                                <a type="button" class="btn btn-danger" disabled>Sold Out</a>
                             }
                         }
                     </div>

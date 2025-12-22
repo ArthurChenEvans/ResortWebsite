@@ -27,22 +27,6 @@ public class HomeController : Controller
     }
    
     [HttpPost]
-    public IActionResult Index(HomeViewModel homeViewModel)
-    {
-        homeViewModel.Villas = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity");
-
-        foreach (var villa in homeViewModel.Villas)
-        {
-            // Temp to give example available Villas until Booking is implemented
-            if (villa.Id % 2 == 0)
-            {
-                villa.IsAvailable = false;
-            }
-        }
-        
-        return View(homeViewModel);
-    }
-
     public IActionResult GetVillasByDate(int nights, DateOnly checkInDate)
     {
         var villas = _unitOfWork.Villa.GetAll(includeProperties: "VillaAmenity").ToList();

@@ -1,0 +1,9 @@
+using System.Linq.Expressions;
+using WhiteLagoon.Domain.Entities;
+
+namespace WhiteLagoon.Application.Common.Interfaces;
+
+public interface IApplicationUserRepository : IRepository<ApplicationUser>
+{
+    void Update(ApplicationUser entity);
+}

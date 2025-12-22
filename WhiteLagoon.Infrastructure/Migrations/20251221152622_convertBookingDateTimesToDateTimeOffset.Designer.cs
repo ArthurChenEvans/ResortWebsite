@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WhiteLagoon.Infrastructure.Data;
@@ -11,9 +12,11 @@ using WhiteLagoon.Infrastructure.Data;
 namespace WhiteLagoon.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251221152622_convertBookingDateTimesToDateTimeOffset")]
+    partial class convertBookingDateTimesToDateTimeOffset
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -472,7 +475,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                     b.Property<int>("Nights")
                         .HasColumnType("integer");
 
-                    b.Property<DateTimeOffset>("PaymentDate")
+                    b.Property<DateTime>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Phone")
@@ -549,62 +552,62 @@ namespace WhiteLagoon.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(1602), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(2070), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "A serene coastal villa with panoramic ocean views and a private infinity pool.",
                             ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 220,
                             Name = "Azure Haven",
                             Occupancy = 6,
                             Price = 450.0,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2370), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3195), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = 2,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2755), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3943), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Nestled in the mountains, this rustic-chic villa offers fireplace warmth and forest trails.",
                             ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 180,
                             Name = "Pinecrest Lodge",
                             Occupancy = 4,
                             Price = 320.5,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2757), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3945), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = 3,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2759), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3948), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Luxury meets comfort in this sun-drenched villa with tropical gardens and outdoor kitchen.",
                             ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 260,
                             Name = "Sunny Palms Estate",
                             Occupancy = 8,
                             Price = 580.75,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2759), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3948), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = 4,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2761), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3954), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Modern city-center villa with floor-to-ceiling windows and rooftop terrace access.",
                             ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 140,
                             Name = "Urban Loft Retreat",
                             Occupancy = 3,
                             Price = 290.0,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2761), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3955), new TimeSpan(0, 0, 0, 0, 0))
                         },
                         new
                         {
                             Id = 5,
-                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2763), new TimeSpan(0, 0, 0, 0, 0)),
+                            CreatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3956), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Tranquil lakeside property with canoe dock, fire pit, and cozy interior design.",
                             ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 200,
                             Name = "Lakeside Serenity",
                             Occupancy = 5,
                             Price = 410.25,
-                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 29, 39, 967, DateTimeKind.Unspecified).AddTicks(2763), new TimeSpan(0, 0, 0, 0, 0))
+                            UpdatedAt = new DateTimeOffset(new DateTime(2025, 12, 21, 15, 26, 21, 507, DateTimeKind.Unspecified).AddTicks(3957), new TimeSpan(0, 0, 0, 0, 0))
                         });
                 });
 
