@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ResortWebsite", "ResortWebsite\ResortWebsite.csproj", "{73ABDA3F-68C5-4D41-8BE7-DB9F61EF3559}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhiteLagoon.Web", "WhiteLagoon.Web\WhiteLagoon.Web.csproj", "{73ABDA3F-68C5-4D41-8BE7-DB9F61EF3559}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WhiteLagoon.Domain", "WhiteLagoon.Domain\WhiteLagoon.Domain.csproj", "{D4F9B69A-F20C-4ACD-A7EA-E67D6EE95C5E}"
 EndProject

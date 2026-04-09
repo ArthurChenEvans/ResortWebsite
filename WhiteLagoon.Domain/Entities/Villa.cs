@@ -27,6 +27,7 @@ public class Villa
     public string? ImageUrl { get; set; }
     public DateTimeOffset CreatedAt { get; init; } 
     public DateTimeOffset UpdatedAt { get; set; }
+    public string? PaddlePriceId { get; set; }
    
     [ValidateNever]
     public IEnumerable<Amenity> VillaAmenity { get; set; }

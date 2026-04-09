@@ -1,0 +1,84 @@
+@model WhiteLagoon.Domain.Entities.Booking
+
+<div class="container pt-4 mt-5 mb-5">
+    <div class="card bg-darker border-secondary shadow-lg rounded-4 overflow-hidden">
+        <div class="card-header bg-dark border-bottom border-secondary py-3">
+            <h3 class="text-light mb-0">
+                <i class="bi bi-credit-card me-2 text-primary"></i>Complete Your Payment
+            </h3>
+        </div>
+        <div class="card-body p-5 text-center">
+            <h4 class="text-light mb-1">@Model.Villa.Name</h4>
+            <p class="text-muted">
+                @Model.CheckInDate.ToString("MM/dd/yyyy") → @Model.CheckOutDate.ToString("MM/dd/yyyy")
+                &nbsp;·&nbsp; @Model.Nights @(Model.Nights > 1 ? "Nights" : "Night")
+            </p>
+            <h2 class="text-primary mb-4">$@Model.TotalCost.ToString("N2")</h2>
+
+            <button id="payBtn" class="btn btn-primary px-5 py-3 fw-bold fs-5 rounded-3 shadow-lg">
+                Pay Now <i class="bi bi-lock ms-2"></i>
+            </button>
+            <div id="payError" class="text-danger mt-3 d-none">
+                Something went wrong creating the payment session. Please try again.
+            </div>
+            <p class="text-muted small mt-3">
+                <i class="bi bi-shield-lock me-1"></i> Secure Payment via Paddle
+            </p>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <script>
+        Paddle.Environment.set("sandbox");
+        Paddle.Initialize({
+            token: 'test_6dd80e476fa92964d59ee190c4a',
+            eventCallback: function(event) {
+                console.log("Paddle event:", event.name); // temporary debug log
+                if (event.name === "checkout.completed") {
+                    const txnId = event.data.transaction_id;
+                    window.location.href =
+                        `/Booking/BookingConfirmation?bookingId=@Model.Id&transactionId=${txnId}`;
+                }
+            }
+        });
+
+        document.getElementById("payBtn").addEventListener("click", async function () {
+            const btn = this;
+            const errorDiv = document.getElementById("payError");
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Loading...';
+            errorDiv.classList.add("d-none");
+
+            try {
+                // Ask the server to create the transaction
+                const response = await fetch('/Booking/CreatePaddleTransaction', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(@Model.Id)
+                });
+
+                if (!response.ok) throw new Error("Server error creating transaction");
+
+                const data = await response.json();
+
+                Paddle.Checkout.open({
+                    transactionId: data.transactionId,
+                    settings: {
+                        displayMode: "overlay",
+                        theme: "dark"
+                    }
+                });
+
+            } catch (err) {
+                errorDiv.classList.remove("d-none");
+                console.error(err);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'Pay Now <i class="bi bi-lock ms-2"></i>';
+            }
+        });
+    </script>
+}

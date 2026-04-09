@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using WhiteLagoon.Infrastructure.Data;
@@ -11,9 +12,11 @@ using WhiteLagoon.Infrastructure.Data;
 namespace WhiteLagoon.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260409040755_ChangeDefaultSeedForVillas")]
+    partial class ChangeDefaultSeedForVillas
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -446,6 +449,9 @@ namespace WhiteLagoon.Infrastructure.Migrations
                     b.Property<DateTimeOffset>("BookingDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("BraintreeTransactionId")
+                        .HasColumnType("text");
+
                     b.Property<DateOnly>("CheckInDate")
                         .HasColumnType("date");
 
@@ -465,9 +471,6 @@ namespace WhiteLagoon.Infrastructure.Migrations
 
                     b.Property<int>("Nights")
                         .HasColumnType("integer");
-
-                    b.Property<string>("PaddleTransactionId")
-                        .HasColumnType("text");
 
                     b.Property<DateTimeOffset>("PaymentDate")
                         .HasColumnType("timestamp with time zone");
@@ -530,9 +533,6 @@ namespace WhiteLagoon.Infrastructure.Migrations
                     b.Property<int>("Occupancy")
                         .HasColumnType("integer");
 
-                    b.Property<string>("PaddlePriceId")
-                        .HasColumnType("text");
-
                     b.Property<double>("Price")
                         .HasColumnType("double precision");
 
@@ -551,7 +551,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                             Id = 1,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "A serene coastal villa with panoramic ocean views and a private infinity pool.",
-                            ImageUrl = "/images/VillaImages/10875808-b728-427e-adda-f7af3d440eb4.jpg",
+                            ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 220,
                             Name = "Azure Haven",
                             Occupancy = 6,
@@ -563,7 +563,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                             Id = 2,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Nestled in the mountains, this rustic-chic villa offers fireplace warmth and forest trails.",
-                            ImageUrl = "/images/VillaImages/f4f8af08-3a40-4ec6-be5f-f4c27a4d6c72.jpg",
+                            ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 180,
                             Name = "Pinecrest Lodge",
                             Occupancy = 4,
@@ -575,7 +575,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                             Id = 3,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Luxury meets comfort in this sun-drenched villa with tropical gardens and outdoor kitchen.",
-                            ImageUrl = "/images/VillaImages/cc053911-6481-43cd-8ed7-5c81729482b4.jpg",
+                            ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 260,
                             Name = "Sunny Palms Estate",
                             Occupancy = 8,
@@ -587,7 +587,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                             Id = 4,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Modern city-center villa with floor-to-ceiling windows and rooftop terrace access.",
-                            ImageUrl = "/images/VillaImages/51a31d12-18c4-4727-8a31-f14cfce149dc.jpg",
+                            ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 140,
                             Name = "Urban Loft Retreat",
                             Occupancy = 3,
@@ -599,7 +599,7 @@ namespace WhiteLagoon.Infrastructure.Migrations
                             Id = 5,
                             CreatedAt = new DateTimeOffset(new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new TimeSpan(0, 0, 0, 0, 0)),
                             Description = "Tranquil lakeside property with canoe dock, fire pit, and cozy interior design.",
-                            ImageUrl = "/images/VillaImages/bdad0648-9d64-4e4c-9579-abb192ab72ad.jpg",
+                            ImageUrl = "https://placehold.co/600x400/EEE/31343C",
                             MeterSquared = 200,
                             Name = "Lakeside Serenity",
                             Occupancy = 5,
