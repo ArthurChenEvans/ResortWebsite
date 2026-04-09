@@ -62,52 +62,26 @@ public class AmenityController : Controller
         return View(viewModel);
     }
 
-    public IActionResult Update(int amenity)
+    public IActionResult Update(AmenityViewModel amenityViewModel)
     {
-        var amenityFromDb = _unitOfWork.Amenity.Get(x => x.Id == amenity, includeProperties: "Villa");
-        if (amenityFromDb == null)
-        {
-            return RedirectToAction("Error", "Home");
-        }
-
-        AmenityViewModel viewModel = new()
-        {
-            Amenity = amenityFromDb,
-            Villas = _unitOfWork.Villa.GetAll().Select(v => new SelectListItem
-            {
-                Text = v.Name,
-                Value = v.Id.ToString(),
-                Selected = v.Id == amenityFromDb.VillaId
-            })
-        };
-        return View(viewModel);
-    }
-
-    [HttpPost]
-    public IActionResult Update(AmenityViewModel viewModel)
-    {
-        if (_unitOfWork.Amenity.Get(x => x.Id == viewModel.Amenity.Id 
-            && x.Id != viewModel.Amenity.Id) != null)
-        {
-            ModelState.AddModelError("Amenity.Id", "This room number already exists");
-        }
-
         if (ModelState.IsValid)
         {
-            _unitOfWork.Amenity.Update(viewModel.Amenity);
+            _unitOfWork.Amenity.Update(amenityViewModel.Amenity);
             _unitOfWork.Save();
-            TempData["success"] = "Room updated successfully";
-            return RedirectToAction("Index");
+            TempData["success"] = "Amenity updated successfully";
+            return RedirectToAction(nameof(Index));
         }
 
-        viewModel.Villas = _unitOfWork.Villa.GetAll().Select(v => new SelectListItem
-        {
-            Text = v.Name,
-            Value = v.Id.ToString(),
-            Selected = v.Id == viewModel.Amenity.VillaId
-        });
-        return View(viewModel);
+        amenityViewModel.Villas = _unitOfWork.Villa
+            .GetAll()
+            .Select(u => new SelectListItem
+            {
+                Text = u.Name,
+                Value = u.Id.ToString()
+            });
+        return View(amenityViewModel);
     }
+
 
     public IActionResult Delete(int amenity)
     {
