@@ -2,7 +2,7 @@
 
 <div class="container pt-4 mt-5 mb-5">
     <div class="card bg-darker border-secondary shadow-lg rounded-4 overflow-hidden">
-        <form method="post">
+        <form asp-controller="Booking" asp-action="FinalizeBooking" method="post" id="bookingForm">
             <input asp-for="VillaId" hidden />
             <input asp-for="UserId" hidden />
             <input asp-for="CheckInDate" hidden />
@@ -28,10 +28,10 @@
                     <div class="col-lg-7">
                         <div class="pe-lg-4 border-end border-secondary">
                             <h4 class="text-primary mb-4">Villa Details</h4>
-                            
-                            <img src="@Model.Villa.ImageUrl" class="img-fluid rounded-4 mb-4 shadow" 
+
+                            <img src="@Model.Villa.ImageUrl" class="img-fluid rounded-4 mb-4 shadow"
                                  style="width: 100%; height: 300px; object-fit: cover;" />
-                            
+
                             <div class="d-flex justify-content-between align-items-start mb-3">
                                 <h2 class="text-light fw-bold">@Model.Villa.Name</h2>
                                 <span class="badge bg-primary fs-5">$@Model.Villa.Price / night</span>
@@ -70,7 +70,7 @@
 
                     <div class="col-lg-5">
                         <h4 class="text-primary mb-4">Enter Booking Details</h4>
-                        
+
                         <div class="mb-3">
                             <label asp-for="Name" class="form-label text-light fw-medium">Full Name</label>
                             <input asp-for="Name" class="form-control bg-dark border-secondary text-light py-2" />
@@ -94,35 +94,35 @@
                         <div class="row g-3 mb-4">
                             <div class="col-6">
                                 <label class="text-muted small fw-bold text-uppercase">Check-in</label>
-                                <input class="form-control bg-darker border-secondary text-light-50" 
+                                <input class="form-control bg-darker border-secondary text-light-50"
                                        value="@Model.CheckInDate.ToString("MM/dd/yyyy")" disabled />
                             </div>
                             <div class="col-6">
                                 <label class="text-muted small fw-bold text-uppercase">Check-out</label>
-                                <input class="form-control bg-darker border-secondary text-light-50" 
+                                <input class="form-control bg-darker border-secondary text-light-50"
                                        value="@Model.CheckOutDate.ToString("MM/dd/yyyy")" disabled />
                             </div>
                             <div class="col-12">
                                 <label class="text-muted small fw-bold text-uppercase">Duration</label>
-                                <input class="form-control bg-darker border-secondary text-light-50" 
+                                <input class="form-control bg-darker border-secondary text-light-50"
                                        value="@Model.Nights @(Model.Nights > 1 ? "Nights" : "Night")" disabled />
                             </div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 py-3 fw-bold fs-5 rounded-3 shadow-lg hover-lift">
+                        <button type="button" id="paddleCheckoutBtn" class="btn btn-primary w-100 py-3 fw-bold fs-5 rounded-3 shadow-lg hover-lift">
                             Looks Good! Checkout Now <i class="bi bi-credit-card ms-2"></i>
                         </button>
-                        
+
                         <p class="text-center text-muted small mt-3">
-                            <i class="bi bi-shield-lock me-1"></i> Secure Payment via Stripe
+                            <i class="bi bi-shield-lock me-1"></i> Secure Payment via Paddle
                         </p>
                     </div>
                 </div>
             </div>
+            <input type="hidden" asp-for="PaddleTransactionId" />
         </form>
     </div>
 </div>
-
 <style>
     body {
         background-color: #0f172a;
@@ -152,4 +152,41 @@
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
+
+    <script src="https://cdn.paddle.com/paddle/v2/paddle.js"></script>
+    <script type="text/javascript">
+        Paddle.Environment.set("sandbox");
+
+        Paddle.Initialize({
+            token: 'test_6dd80e476fa92964d59ee190c4a',
+            eventCallback: function(event) {
+                if (event.name === "checkout.completed") {
+                    const txnId = event.data.transaction_id;
+
+                    const hiddenInput = document.getElementById("PaddleTransactionId");
+                    const form = document.getElementById("bookingForm");
+
+                    if (hiddenInput) {
+                        hiddenInput.value = txnId;
+                        form.submit();
+                    }
+                }
+            }
+        });
+
+        document.getElementById("paddleCheckoutBtn").addEventListener("click", function() {
+            Paddle.Checkout.open({
+                settings: {
+                    displayMode: "overlay",
+                    theme: "dark"
+                },
+                items: [
+                    {
+                        priceId: "pri_01knr57f67rgz32dxrrwg99bpw",
+                        quantity: 1
+                    }
+                ]
+            });
+        });
+    </script>
 }

@@ -16,19 +16,19 @@ public class BookingController : Controller
     {
         _unitOfWork = unitOfWork;
     }
-    
+
     [Authorize]
     public IActionResult FinalizeBooking(int villaId, DateOnly checkInDate, int nights)
     {
         var claimsIdentity = (ClaimsIdentity)User.Identity;
         var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-        
+
         ApplicationUser user = _unitOfWork.User.Get(x => x.Id == userId);
-        
+
         Booking booking = new Booking
         {
             VillaId = villaId,
-            Villa = _unitOfWork.Villa.Get(x => x.Id == villaId, includeProperties:"VillaAmenity"),
+            Villa = _unitOfWork.Villa.Get(x => x.Id == villaId, includeProperties: "VillaAmenity"),
             CheckInDate = checkInDate,
             Nights = nights,
             CheckOutDate = checkInDate.AddDays(nights),
@@ -37,9 +37,9 @@ public class BookingController : Controller
             Email = user.Email,
             Name = user.Name
         };
-        
+
         booking.TotalCost = booking.Villa.Price * nights;
-        
+
         return View(booking);
     }
 
@@ -47,20 +47,36 @@ public class BookingController : Controller
     [HttpPost]
     public IActionResult FinalizeBooking(Booking booking)
     {
-        booking.Villa = _unitOfWork.Villa.Get(x => x.Id == booking.VillaId);
-        booking.TotalCost = booking.Villa.Price * booking.Nights;
-        booking.Status = SD.StatusPending;
+        var villa = _unitOfWork.Villa.Get(x => x.Id == booking.VillaId);
+        booking.Villa = villa;
+        booking.TotalCost = villa.Price * booking.Nights;
         booking.BookingDate = DateTimeOffset.UtcNow;
-        
+
+        if (!string.IsNullOrEmpty(booking.PaddleTransactionId))
+        {
+            booking.Status = SD.StatusApproved;
+            booking.IsPaymentSuccessful = true;
+            booking.PaymentDate = DateTimeOffset.UtcNow;
+        }
+        else
+        {
+            booking.Status = SD.StatusPending;
+        }
+
         _unitOfWork.Booking.Add(booking);
         _unitOfWork.Save();
-        
-        return RedirectToAction(nameof(BookingConfirmation), new { bookingId = booking.Id });
+
+        return RedirectToAction("BookingConfirmation", new { bookingId = booking.Id });
     }
-    
+
     [Authorize]
     public IActionResult BookingConfirmation(int bookingId)
     {
-        return View(bookingId);
+        Booking booking = _unitOfWork.Booking.Get(u => u.Id == bookingId, includeProperties: "Villa");
+
+        if (booking == null)
+            return NotFound();
+        
+        return View(booking);
     }
 }

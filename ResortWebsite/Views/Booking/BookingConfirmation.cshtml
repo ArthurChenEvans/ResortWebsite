@@ -1,0 +1,76 @@
+@model WhiteLagoon.Domain.Entities.Booking
+
+<div class="container pt-4 mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <div class="card bg-darker border-secondary shadow-lg rounded-4 overflow-hidden text-center">
+                
+                <div class="card-body p-5">
+                    <div class="mb-4">
+                        <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+                    </div>
+                    
+                    <h2 class="text-light fw-bold mb-2">Booking Confirmed!</h2>
+                    <p class="text-muted mb-4">Your stay at White Lagoon is officially reserved.</p>
+
+                    <div class="bg-dark border border-secondary rounded-3 p-4 mb-4">
+                        <span class="text-muted text-uppercase fw-bold small d-block mb-2">Booking Reference</span>
+                        <h4 class="text-primary fw-mono mb-0">#@Model.Id</h4>
+                    </div>
+
+                    <div class="row g-3 text-start mb-4">
+                        <div class="col-6">
+                            <label class="text-muted small fw-bold text-uppercase">Villa</label>
+                            <p class="text-light mb-0">@Model.Villa.Name</p>
+                        </div>
+                        <div class="col-6 text-end">
+                            <label class="text-muted small fw-bold text-uppercase">Amount Paid</label>
+                            <p class="text-success mb-0 fw-bold">$@Model.TotalCost.ToString("N2")</p>
+                        </div>
+                        <div class="col-12 border-top border-secondary pt-3 mt-3">
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Transaction ID:</span>
+                                <span class="text-light-50 small">@Model.PaddleTransactionId</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <a asp-controller="Home" asp-action="Index" class="btn btn-primary py-3 fw-bold rounded-3 hover-lift">
+                            Return Home
+                        </a>
+                        <a href="javascript:window.print()" class="btn btn-outline-secondary py-2 small">
+                            <i class="bi bi-printer me-2"></i> Print Receipt
+                        </a>
+                    </div>
+                </div>
+
+                <div class="card-footer bg-dark border-top border-secondary py-3">
+                    <p class="text-muted small mb-0">
+                        A confirmation email has been sent to <strong>@Model.Email</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #0f172a;
+    }
+    .bg-darker {
+        background-color: #0a0f1a !important;
+    }
+    .text-light-50 {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        transition: all 0.2s ease;
+        box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3) !important;
+    }
+    .fw-mono {
+        font-family: 'Courier New', Courier, monospace;
+    }
+</style>
