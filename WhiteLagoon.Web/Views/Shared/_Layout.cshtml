@@ -13,23 +13,22 @@
     <link rel="stylesheet" href="//cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css" />
 </head>
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom border-body py-3">
-            <div class="container-fluid">
-                <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
-                    <img src="~/images/logo.png" alt="Logo" height="30" class="me-2" />
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarContent">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item">
-                            <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark border-bottom border-body py-3">
+        <div class="container-fluid">
+            <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
+                <img src="~/images/logo.png" alt="Logo" height="30" class="me-2" />
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    @if (User.IsInRole(SD.Role_Admin))
+                    {
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle text-white" href="#" id="contentManagementDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="bi bi-collection me-1"></i>Content Management
@@ -57,35 +56,42 @@
                                 </li>
                             </ul>
                         </li>
-                    </ul>
-                    <partial name="_LoginPartial" />
-                </div>
-            </div>
-        </nav>
-    </header>
-
-    <div class="container-fluid px-0 pb-4">
-        <main role="main">
-            <partial name="_Notification" />
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="border-top footer bg-dark text-light py-4">
-        <div class="container-fluid">
-            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
-                <div class="mb-2 mb-md-0">&copy; 2026 - WhiteLagoon.Web</div>
-                <div>
-                    <a class="text-decoration-none text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
-                </div>
+                    }
+                    else if (User.IsInRole(SD.Role_Customer))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link active" asp-controller="Booking" asp-action="Index">Manage Bookings</a>
+                        </li>
+                    }
+                </ul>
+                <partial name="_LoginPartial" />
             </div>
         </div>
-    </footer>
+    </nav>
+</header>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    <script src="//cdn.datatables.net/2.3.7/js/dataTables.min.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+<div class="container-fluid px-0 pb-4">
+    <main role="main">
+        <partial name="_Notification" />
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="border-top footer bg-dark text-light py-4">
+    <div class="container-fluid">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+            <div class="mb-2 mb-md-0">&copy; 2026 - WhiteLagoon.Web</div>
+            <div>
+                <a class="text-decoration-none text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+<script src="//cdn.datatables.net/2.3.7/js/dataTables.min.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

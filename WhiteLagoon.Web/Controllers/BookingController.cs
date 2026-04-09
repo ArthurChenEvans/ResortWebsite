@@ -78,6 +78,10 @@ public class BookingController : Controller
         ModelState.Remove("User");
         ModelState.Remove("Villa");
         ModelState.Remove("VillaNumbers");
+        ModelState.Remove("CheckInDate");
+        ModelState.Remove("CheckOutDate");
+        ModelState.Remove("Nights");
+        ModelState.Remove("VillaNumber");
         
         if (!ModelState.IsValid)
         {
@@ -237,9 +241,74 @@ public class BookingController : Controller
     public IActionResult BookingDetails(int bookingId)
     {
         Booking booking =  _unitOfWork.Booking.Get(u => u.Id == bookingId,
-            includeProperties: "User,Villa"); 
+            includeProperties: "User,Villa");
+
+        if (booking.VillaNumber == 0 && booking.Status == SD.StatusApproved)
+        {
+            var availableVillaNumber = AssignAvailableVillaNumbersByVilla(booking.VillaId);
+
+            booking.VillaNumbers = _unitOfWork
+                .VillaNumber
+                .GetAll(u => u.VillaId == booking.VillaId
+                    && availableVillaNumber.Any(x => x == u.Villa_Number))
+                .ToList();
+        }
         
         return View(booking);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = SD.Role_Admin)]
+    public IActionResult CheckIn(Booking booking)
+    {
+        _unitOfWork.Booking.UpdateStatus(booking.Id, SD.StatusCheckedIn, booking.VillaNumber);
+        _unitOfWork.Save();
+        TempData["Success"] = "Booking Updated Successfully";
+        return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+    }
+
+    [HttpPost]
+    [Authorize(Roles = SD.Role_Admin)]
+    public IActionResult CheckOut(Booking booking)
+    {
+        _unitOfWork.Booking.UpdateStatus(booking.Id, SD.StatusCompleted, booking.VillaNumber);
+        _unitOfWork.Save();
+        TempData["Success"] = "Booking Updated Successfully";
+        return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+    }
+    
+    [HttpPost]
+    [Authorize(Roles = SD.Role_Admin)]
+    public IActionResult CancelBooking(Booking booking)
+    {
+        _unitOfWork.Booking.UpdateStatus(booking.Id, SD.StatusCancelled, 0);
+        _unitOfWork.Save();
+        TempData["Success"] = "Booking Updated Successfully";
+        return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+    }
+    private List<int> AssignAvailableVillaNumbersByVilla(int villaId)
+    {
+        List<int> availableVillaNumbers = new();
+        
+        var villaNumbers = _unitOfWork
+            .VillaNumber
+            .GetAll(u => u.VillaId == villaId);
+
+        var checkedInVilla = _unitOfWork
+            .Booking
+            .GetAll(u => u.VillaId == villaId &&
+                         u.Status == SD.StatusApproved)
+            .Select(u => u.VillaNumber);
+
+        foreach (var villaNumber in villaNumbers)
+        {
+            if (!checkedInVilla.Contains(villaNumber.Villa_Number))
+            {
+                availableVillaNumbers.Add(villaNumber.Villa_Number);
+            }
+        }
+        
+        return availableVillaNumbers;
     }
     
 
