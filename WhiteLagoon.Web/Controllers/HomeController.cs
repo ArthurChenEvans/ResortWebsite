@@ -1,22 +1,26 @@
 using System.Diagnostics;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ResortWebsite.Models;
 using ResortWebsite.ViewModels;
 using WhiteLagoon.Application.Common.Interfaces;
 using WhiteLagoon.Application.Common.Utility;
+using WhiteLagoon.Domain.Entities;
 
 namespace ResortWebsite.Controllers;
 
 public class HomeController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly UserManager<ApplicationUser> _userManager;
     
-    public HomeController(IUnitOfWork unitOfWork)
+    public HomeController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
     {
         _unitOfWork = unitOfWork;
+        _userManager = userManager;
     }
     
-    public IActionResult Index()
+    public async Task<IActionResult> Index()
     {
         HomeViewModel homeViewModel = new()
         {
@@ -24,6 +28,17 @@ public class HomeController : Controller
             Nights = 1,
             CheckInDate = DateOnly.FromDateTime(DateTime.Now),
         };
+        
+        var user = await _userManager.GetUserAsync(HttpContext.User);
+        
+        if (user == null)
+            return View(homeViewModel);
+
+        if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
+        {
+            return RedirectToAction("Index", "Dashboard");
+        }
+        
         return View(homeViewModel);
     }
    
@@ -53,11 +68,6 @@ public class HomeController : Controller
         };
         
         return PartialView("_Villas", homeViewModel);
-    }
-
-    public IActionResult Privacy()
-    {
-        return View();
     }
 
     public IActionResult Error()

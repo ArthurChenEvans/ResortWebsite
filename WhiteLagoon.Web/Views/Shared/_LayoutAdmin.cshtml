@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/WhiteLagoon.Web.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="//cdn.datatables.net/2.3.7/css/dataTables.dataTables.min.css" />
+    <link rel="stylesheet" href="~/css/apexcharts.css" />
     <style>
         .sidebar {
             min-height: calc(100vh - 70px);
@@ -34,7 +35,7 @@
         <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" asp-area="" asp-controller="Home" asp-action="Index">
                 <img src="~/images/logo.png" alt="Logo" height="30" class="me-2" />
-                <span>Admin Panel</span>
+                <span>@ViewData["Title"]</span>
             </a>
             <div class="d-flex align-items-center">
                 <partial name="_LoginPartialAdmin" />
@@ -52,8 +53,13 @@
             <div class="position-sticky pt-3">
                 <ul class="nav flex-column">
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                        <a class="nav-link" asp-controller="Dashboard" asp-action="Index">
                             <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" asp-controller="Home" asp-action="Index">
+                            <i class="bi bi-house me-2"></i> Home
                         </a>
                     </li>
                     <li class="px-3 mt-4 mb-1 text-muted text-uppercase small">
@@ -107,6 +113,7 @@
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 <script src="//cdn.datatables.net/2.3.7/js/dataTables.min.js" asp-append-version="true"></script>
+<script src="~/js/apexcharts.js"></script>
 @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
