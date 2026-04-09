@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
       <UserSecretsId>8cf6c4bb-4eed-402c-a901-8a31d24d8f32</UserSecretsId>
+      <RootNamespace>ResortWebsite</RootNamespace>
   </PropertyGroup>
 
     <ItemGroup>

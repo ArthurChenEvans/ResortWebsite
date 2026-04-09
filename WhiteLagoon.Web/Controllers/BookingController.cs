@@ -1,5 +1,4 @@
 using System.Security.Claims;
-using Braintree;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WhiteLagoon.Application.Common.Interfaces;
@@ -15,6 +14,11 @@ public class BookingController : Controller
     public BookingController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
+    }
+
+    public IActionResult Index()
+    {
+        return View();
     }
 
     [Authorize]
@@ -72,11 +76,47 @@ public class BookingController : Controller
     [Authorize]
     public IActionResult BookingConfirmation(int bookingId)
     {
-        Booking booking = _unitOfWork.Booking.Get(u => u.Id == bookingId, includeProperties: "Villa");
+        Booking booking = _unitOfWork.Booking
+            .Get(u => u.Id == bookingId, includeProperties: "User,Villa");
 
         if (booking == null)
             return NotFound();
+
+        return View(booking);
+    }
+
+    [Authorize]
+    public IActionResult BookingDetails(int bookingId)
+    {
+        Booking booking =  _unitOfWork.Booking.Get(u => u.Id == bookingId,
+            includeProperties: "User,Villa"); 
         
         return View(booking);
     }
+    
+
+    #region API Calls
+    [HttpGet]
+    [Authorize]
+    public IActionResult GetAll(string status)
+    {
+        IEnumerable<Booking> objBookings;
+
+        if (User.IsInRole(SD.Role_Admin))
+        {
+            objBookings = _unitOfWork.Booking.GetAll(includeProperties: "User,Villa");
+        }
+        else
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            objBookings = _unitOfWork.Booking
+                .GetAll(u => u.UserId == userId, includeProperties: "User,Villa");
+        }
+        if (!string.IsNullOrEmpty(status))
+            objBookings = objBookings.Where(x => x.Status.ToLower().Equals(status.ToLower()));
+        
+        return Json(new { data = objBookings });
+    }
+    #endregion
 }

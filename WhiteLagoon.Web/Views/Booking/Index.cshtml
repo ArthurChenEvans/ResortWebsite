@@ -1,0 +1,156 @@
+
+@{
+    var status = Context.Request.Query["status"];
+
+    var approved = "";
+    var pending = "";
+    var checkedIn = "";
+    var completed = "";
+    var cancelled = "";
+    var refunded = "";
+
+    switch (status)
+    {
+        case SD.StatusApproved:
+            approved = "text-white bg-success";
+            break;
+        case SD.StatusPending:
+            pending = "text-white bg-success";
+            break;
+        case SD.StatusCheckedIn:
+            checkedIn = "text-white bg-success";
+            break;
+        case SD.StatusCompleted:
+            completed = "text-white bg-success";
+            break;
+        case SD.StatusCancelled:
+            cancelled = "text-white bg-success";
+            break;
+        case SD.StatusRefunded:
+            refunded = "text-white bg-success";
+            break;
+    }
+}
+<div class="py-5 bg-gradient-primary">
+    <div class="container">
+        <div class="text-center mb-4">
+            <h1 class="display-4 fw-bold text-light">Bookings</h1>
+            <p class="lead text-muted">
+                Manage and review all customer reservations
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="container py-4">
+    <div class="row mb-4">
+        <div class="col-md-12 text-end">
+            <a
+                asp-controller="Booking"
+                asp-action="Create"
+                class="btn btn-primary px-4 py-2"
+            >
+                <i class="bi bi-plus-circle me-2"></i>New Booking
+            </a>
+        </div>
+    </div>
+
+    <div
+        class="card bg-dark border-secondary shadow-lg rounded-4 overflow-hidden"
+    >
+        <div class="card-header bg-darker py-3">
+            <h2 class="text-light mb-0">
+                <i class="bi bi-list-ul me-2"></i>Booking List
+            </h2>
+        </div>
+        <div class="card-body p-4">
+            <div class="table-responsive">
+                <div class="d-flex justify-content-end pb-4 pt-2">
+                    <ul class="list-group list-group-horizontal-sm">
+                        <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
+                           asp-route-status="@SD.StatusPending">
+                            <li class="list-group-item @pending">Pending</li>
+                        </a>
+                        <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
+                           asp-route-status="@SD.StatusApproved">
+                            <li class="list-group-item @approved">Approved</li>
+                        </a>
+                        <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
+                           asp-route-status="@SD.StatusCheckedIn">
+                            <li class="list-group-item @checkedIn">Checked In</li>
+                        </a>
+                        <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
+                               asp-route-status="@SD.StatusCompleted">
+                            <li class="list-group-item @completed">Completed</li>
+                        </a>
+                        <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
+                           asp-route-status="@SD.StatusCancelled">
+                            <li class="list-group-item @cancelled">Cancelled</li>
+                        </a>
+                        <a style="text-decoration:none;" asp-controller="Booking" asp-action="Index"
+                           asp-route-status="@SD.StatusRefunded">
+                            <li class="list-group-item @refunded">Refunded</li>
+                        </a>
+                    </ul>
+                </div>
+                <table
+                    id="tblBookings"
+                    class="table table-dark table-hover mb-0 w-100">
+                    <thead class="bg-darker">
+                    <tr>
+                        <th class="px-4 py-3">ID</th>
+                        <th class="px-4 py-3">Name</th>
+                        <th class="px-4 py-3">Email</th>
+                        <th class="px-4 py-3">Phone</th>
+                        <th class="px-4 py-3">Status</th>
+                        <th class="px-4 py-3">Check In</th>
+                        <th class="px-4 py-3">Nights</th>
+                        <th class="px-4 py-3">Total</th>
+                        <th class="px-4 py-3"></th>
+                    </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script src="~/js/booking.js"></script>
+}
+
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #0f172a, #1e293b, #334155);
+    }
+    .bg-darker {
+        background-color: #0a0f1a !important;
+    }
+    .card {
+        border: 1px solid #334155;
+    }
+    .table-dark {
+        --bs-table-bg: #0f172a;
+        --bs-table-striped-bg: #151f30;
+        --bs-table-hover-bg: #1e293b;
+    }
+    .border-secondary {
+        border-color: #334155 !important;
+    }
+    .dataTables_wrapper .dataTables_length,
+    .dataTables_wrapper .dataTables_filter,
+    .dataTables_wrapper .dataTables_info,
+    .dataTables_wrapper .dataTables_processing,
+    .dataTables_wrapper .dataTables_paginate {
+        color: #94a3b8 !important;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        background-color: #0a0f1a;
+        border: 1px solid #334155;
+        color: white;
+        border-radius: 5px;
+        padding: 5px;
+    }
+</style>
