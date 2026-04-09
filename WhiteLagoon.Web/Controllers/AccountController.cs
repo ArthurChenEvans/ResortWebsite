@@ -42,9 +42,6 @@ public class AccountController : Controller
     {
         if (!await _roleManager.RoleExistsAsync(SD.Role_Admin))
         {
-            // I would prefer to manually seed them in ApplicationDbContext, but I'm just
-            // following what the course is showing.
-            // I think it is showing to do it this way to demonstrate what RoleManage provides.
             await _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin));
             await _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer));
         }
@@ -136,13 +133,21 @@ public class AccountController : Controller
            if (result.Succeeded)
            {
                
-               if (string.IsNullOrEmpty(loginViewModel.ReturnUrl))
+               var user = await _userManager.FindByEmailAsync(loginViewModel.Email);
+               if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
                {
-                   return RedirectToAction("Index", "Home");
+                   return RedirectToAction("Index", "Dashboard");
                }
+               else
+               {
+                   if (string.IsNullOrEmpty(loginViewModel.ReturnUrl))
+                   {
+                       return RedirectToAction("Index", "Home");
+                   }
                
-               // Ensures always redirect to the same domain and not a malicious website
-               return LocalRedirect(loginViewModel.ReturnUrl);
+                   // Ensures always redirect to the same domain and not a malicious website
+                   return LocalRedirect(loginViewModel.ReturnUrl);
+               }
            }
            
            ModelState.AddModelError(string.Empty, "Invalid login attempt.");
