@@ -1,28 +1,26 @@
 # 🌴 WhiteLagoon Villas
-
 A full-stack luxury villa booking platform built with **.NET 10 MVC**, **PostgreSQL**, and **Onion Architecture**.  
-Modern dark-themed UI, admin dashboard for managing villas/rooms/amenities, public booking flow, and responsive design.
-
-> **Note:** The final checkout / payment step is intentionally **not functional** (Stripe is unavailable in the Isle of Man). The rest of the application (browsing, availability check, admin CRUD, booking summary) works end-to-end.
+Modern dark-themed UI, admin dashboard for managing villas/rooms/amenities, public booking flow with real payments, and responsive design.
 
 ## 📦 Technologies
-
 - **Backend**  
   - .NET 10 (MVC)  
   - Entity Framework Core  
   - PostgreSQL  
   - Onion / Clean Architecture  
   - ASP.NET Identity (basic auth for admin)
+  - Paddle Billing API (server-side payment integration)
 
 - **Frontend**  
   - Razor Views + Bootstrap 5  
   - Custom CSS (dark modern theme)  
-  - JavaScript & some JQuery
+  - JavaScript & jQuery
+  - ApexCharts (admin dashboard analytics)
 
 - **Tools**  
   - dotnet CLI  
   - EF Core migrations  
-  - User Secrets (for connection string)
+  - User Secrets (for connection string + API keys)
 
 ## ✨ Features
 
@@ -30,50 +28,86 @@ Modern dark-themed UI, admin dashboard for managing villas/rooms/amenities, publ
 - Beautiful villa showcase grid with filters
 - Availability checker (date + nights)
 - Detailed villa view with amenities modal
-- Booking summary page (pre-checkout)
+- Full booking flow with secure payment via Paddle
+- Booking confirmation screen
 
 ### Admin area (requires login)
 - CRUD for Villas (create, edit, delete, upload image)
 - Room inventory management per villa
 - Amenity management (assign to villas)
-- Clean, dark-themed admin dashboard
+- Booking management with status tracking (Pending → Approved → Checked In → Completed)
+- Clean, dark-themed admin dashboard with live analytics
 
-## ⚠️ Current Limitations
+### Admin Dashboard (ApexCharts)
+- **Total Bookings** radial KPI card with month-over-month comparison
+- **User Registrations** radial KPI card with month-over-month comparison
+- **Total Revenue** radial KPI card with month-over-month comparison
+- **New Members & Bookings** line chart (past 30 days, two-series time series)
+- **Customer Bookings** pie chart (new vs returning customers)
 
-- **Checkout / Payment** does **not** work (intentionally left unimplemented)  
-  → Reason: Stripe is not supported in the Isle of Man.  
-  The booking flow stops at the final confirmation screen.
+## 💳 Payment Integration
+
+Payments are handled via **[Paddle Billing](https://www.paddle.com/)** (currently running in **sandbox mode**).
+
+The integration follows a secure server-side flow — the browser never creates or controls the transaction:
+
+```
+Guest fills booking form
+  → Server saves booking as Pending
+  → Server creates Paddle transaction via API (secret key, never exposed to client)
+  → Paddle overlay opens with server-created transaction
+  → Guest pays
+  → Server independently verifies payment status with Paddle API
+  → Booking marked as Approved only after server-side confirmation
+```
+
+> ⚠️ **Sandbox mode**: No real money is charged. Use Paddle's test card details to complete a booking.
 
 ## 🚦 Running the Project Locally
 
 1. **Clone the repository**
 
-   git clone https://github.com/YOUR-USERNAME/WhiteLagoon.git  
-   cd WhiteLagoon
+2. **Set secrets** (using User Secrets — recommended)
 
-2. **Set the database connection string** (using User Secrets — recommended)
+   ```bash
+   dotnet user-secrets init
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Database=WhiteLagoon;Username=youruser;Password=yourpassword"
+   dotnet user-secrets set "Paddle:ApiKey" "your_sandbox_secret_key"
+   dotnet user-secrets set "Paddle:BaseUrl" "https://sandbox-api.paddle.com"
+   ```
 
-   `dotnet user-secrets init` 
-   `dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Host=localhost;Database=WhiteLagoon;Username=youruser;Password=yourpassword"`
+3. **Apply migrations**
 
-   Replace postgres / yourpassword with your actual PostgreSQL credentials.
-
-3. **Apply migrations** to create/update the database
-
-   `dotnet ef database update`
+   ```bash
+   dotnet ef database update
+   ```
 
 4. **Run the application**
 
-   `dotnet run`
-
-   → Open https://localhost:5001 (or the port shown in the console)
+   ```bash
+   dotnet run --launch-profile https
+   ```
+   → Open `https://localhost:7049` (or the port shown in the console)
+   
+   > HTTPS is required — Paddle enforces it even for local development.
 
 5. **Optional: Create an admin user**
-
-   - Register a user via the site /Identity/Account/Register  
-   - Manually assign the Admin role in the Register section
+   - Register via `/Identity/Account/Register`
+   - Manually assign the `Admin` role in the database
 
 ## 🖼️ Screenshots
+
+### Admin – Dashboard & Navigation
+![Admin dashboard with ApexCharts analytics](images/readme/admin-dashboard-and-nav.png)
+
+### Booking – Complete Payment
+![Complete payment screen](images/readme/complete-payment.png)
+
+### Booking – Payment (Paddle Sandbox)
+![Paddle payment overlay](images/readme/paddle-pay-screen.png)
+
+### Booking – Confirmed
+![Booking confirmation screen](images/readme/booking-confirmed.png)
 
 ### Homepage – Hero & Villas Grid
 ![Homepage hero and villa showcase](images/readme/homepage.png)
@@ -81,32 +115,36 @@ Modern dark-themed UI, admin dashboard for managing villas/rooms/amenities, publ
 ### Availability Checker & Villa Cards
 ![Availability form and cards](images/readme/availability-villas.png)
 
-### Villa Details Modal
-![Detailed villa popup with amenities](images/readme/villa-details-modal.png)
+### Villa Details
+![Detailed villa view with amenities](images/readme/villa-details.modal.png)
 
-### Booking Summary (pre-checkout)
+### Booking – Finalize
 ![Booking finalize screen](images/readme/booking-finalize.png)
 
+### Booking – List & Management
+![Booking list](images/readme/booking-list.png)
+
+### Booking – Details
+![Booking details view](images/readme/booking-details.png)
+
 ### Admin – Villas Management
-![Admin villas CRUD dashboard](images/readme/admin-villas.png)
+![Admin villas CRUD](images/readme/admin-villas.png)
 
 ### Admin – Room Inventory
 ![Room inventory per villa](images/readme/room-inventory.png)
 
 ## 🧠 Architecture Highlights
-
 - **Onion Architecture** — domain core independent of frameworks
-- Clear separation: Application / Domain / Infrastructure 
+- Clear separation: Application / Domain / Infrastructure
 - Repository + Unit of Work pattern
-- Dependency Injection everywhere
+- Dependency Injection throughout
 - EF Core with fluent configuration
+- Server-side payment verification — client is never trusted for payment status
 
 ## 💭 Possible Improvements
-
-- Implement an alternative payment gateway available in Isle of Man (e.g. PayPal, local provider)
+- Move Paddle from sandbox to live mode
 - Add real image upload to cloud storage (Azure Blob, AWS S3, Cloudinary)
 - Improve mobile experience for admin panels
 - Add search/filter on public villa list
 - Email confirmation after booking
 - Calendar / real availability blocking
-- Role-based access control refinements
