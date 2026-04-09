@@ -12,12 +12,10 @@ namespace ResortWebsite.Controllers;
 public class HomeController : Controller
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly UserManager<ApplicationUser> _userManager;
     
-    public HomeController(IUnitOfWork unitOfWork, UserManager<ApplicationUser> userManager)
+    public HomeController(IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
-        _userManager = userManager;
     }
     
     public async Task<IActionResult> Index()
@@ -28,16 +26,6 @@ public class HomeController : Controller
             Nights = 1,
             CheckInDate = DateOnly.FromDateTime(DateTime.Now),
         };
-        
-        var user = await _userManager.GetUserAsync(HttpContext.User);
-        
-        if (user == null)
-            return View(homeViewModel);
-
-        if (await _userManager.IsInRoleAsync(user, SD.Role_Admin))
-        {
-            return RedirectToAction("Index", "Dashboard");
-        }
         
         return View(homeViewModel);
     }
